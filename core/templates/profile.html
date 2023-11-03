@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="" />
     <meta name="keywords" content="" />
-	<title>Profile - {{username}}</title>
+	<title>Profile - {{user_profile.user.username}}</title>
    <!-- <link rel="icon" href="images/fav.png" type="image/png" sizes="16x16"> -->
     
     <link rel="stylesheet" href="{% static 'css/main.min.css' %}">
@@ -17,6 +17,64 @@
     <link rel="stylesheet" href="{% static 'css/color.css' %}">
     <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
 
+	<style>
+		/* Add your custom styles here */
+	
+		/* Page background */
+		body {
+			background-color: #f5f5f5;
+			font-family: Arial, sans-serif;
+		}
+	
+		/* Header styling */
+		header {
+			background-color: #4a90e2;
+			padding: 20px;
+			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+			color: #fff;
+		}
+	
+		/* Feature photo */
+		.feature-photo {
+			text-align: center;
+		}
+	
+		/* Bio section */
+		.bio {
+			background-color: #fff;
+			padding: 20px;
+			margin: 20px 0;
+		}
+	
+		/* User profile image */
+		.user-avatar figure img {
+			border: 5px solid #fff;
+			box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+			height: 250px; /* Adjust image height */
+			width: 100%; /* Adjust image width */
+		}
+	
+		/* Timeline info */
+		.timeline-info h5 {
+			color: black;
+			white-space: nowrap;
+			width: 110px;
+			font-size: 27px;
+		}
+	
+		/* Custom background and color for buttons */
+		.add-btn button {
+			background-color: #ffc0cb; /* Background color */
+			border: 2px solid #ffc0cb; /* Border color */
+			color: #fff; /* Text color */
+			padding: 10px 20px;
+			font-size: 20px;
+			border-radius: 5px;
+			cursor: pointer;
+		}
+	
+		/* Add more custom styles as needed */
+	</style>
 </head>
 <body>
 <!--<div class="se-pre-con"></div>-->
@@ -26,15 +84,40 @@
 	
 	<section>
 			<div class="feature-photo">
-				<figure><img src="{% static 'images/resources/timeline-1.jpg' %}" alt=""></figure>
-				<form>
+				<figure><img src="{{user_profile.profileimg2.url}}"style="height: 450px; width: 100%;" alt=""></figure>
+				{% comment %} <figure><img width="100" height="100" src="{{ user_profile.profileimg2.url }}" /></figure> {% endcomment %}
+				{% comment %} <img src="{{user_profile.profileimg.url}}" style="height: 250px; width: 100%;" alt=""> {% endcomment %}
+				<form action="/follow" method="POST">
+					{% csrf_token %}
 					<div class="add-btn">
 					<span style="color: white; font-size: 27px; margin-right: 520px;"><b><u><a href="/">Home</a></u></b></span>
-					<span style="color: white; font-size: 27px;"><b>11 Post</b></span>
-					<span style="color: white; font-size: 27px;"><b>1.7m followers</b></span>
-					<span style="color: white; font-size: 27px;"><b>3.5k following</b></span>
-					<a href="" title="" data-ripple=""><button style="background-color: #ffc0cb; border: #ffc0cb;">Follow</button></a>
 					
+					{% if user_post_length == 0 %}
+					<span style="color: white; font-size: 27px;"><b>No Post</b></span>
+					{% elif user_post_length == 1 %}
+					<span style="color: white; font-size: 27px;"><b>{{user_post_length}} Post</b></span>
+					{% else %}
+					<span style="color: white; font-size: 27px;"><b>{{user_post_length}} Posts</b></span>
+					{% endif %}
+
+					{% if user_followers == 0 or user_followers == 1 %}
+					<span style="color: white; font-size: 27px;"><b>{{user_followers}} follower</b></span>
+					{% else %}
+					<span style="color: white; font-size: 27px;"><b>{{user_followers}} followers</b></span>
+					{% endif %}
+
+
+					<span style="color: white; font-size: 27px;"><b>{{user_following}} following</b></span>
+
+					<input type="hidden" value="{{user.username}}" name="follower" />
+					<input type="hidden" value="{{user_object.username}}" name="user" />
+
+					{% if user_object.username == user.username %}
+					<a href="/settings" data-ripple="">Account Settings</a>
+					{% else %}
+					<a data-ripple=""><button type="submit" style="background-color: #ffc0cb; border: #ffc0cb;">{{button_text}}</button></a>
+					{% endif %}
+
 					</div>
 				</form>
 
@@ -50,13 +133,13 @@
 						<div class="col-lg-2 col-sm-3">
 							<div class="user-avatar">
 								<figure>
-									<img src="https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png" style="height: 250px; width: 100%;" alt="">
-									<form class="edit-phto">
+									<img src="{{user_profile.profileimg.url}}" style="height: 250px; width: 100%;" alt="">
+									<!-- <form class="edit-phto">
 										<i class="fa fa-camera-retro"></i>
 										<label class="fileContainer">
 											<a href="#account-settings">Upload Profile Photo</a>
 										</label>
-									</form>
+									</form> -->
 								</figure>
 							</div>
 						</div>
@@ -64,7 +147,7 @@
 							<div class="timeline-info">
 								<ul>
 									<li class="admin-name">
-									  <h5 style="color: black;white-space: nowrap; width: 110px; font-size: 27px;"><b>@username</b><!--<i class="fa fa-check-circle" style="color: #48dbfb;" aria-hidden="true"></i>--></h5>
+									  <h5 style="color: black;white-space: nowrap; width: 110px; font-size: 27px;"><b>{{user_profile.user.username}}</b><!--<i class="fa fa-check-circle" style="color: #48dbfb;" aria-hidden="true"></i>--></h5>
 									  <!--<span>Group Admin</span>-->
 									</li>
 									<!--<li>
@@ -92,7 +175,7 @@
 		</section><!-- top area -->
 		<section>
 			<div class="bio">
-				Bio goes here...
+					{{user_profile.bio}}
 			</div>
 		</section>
 		
@@ -123,20 +206,13 @@
 								<div class="central-meta">
 									<ul class="photos">
 					
+										{% for post in user_posts %}
 										<li>
-											<a class="strip" href="https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png" title="" data-strip-group="mygroup" data-strip-group-options="loop: false">
-												<img src="https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png" style="height: 250px; width: 300px;" alt=""></a>
+											<a class="strip" href="{{post.image.url}}" title="" data-strip-group="mygroup" data-strip-group-options="loop: false">
+												<img src="{{post.image.url}}" style="height: 250px; width: 300px;" alt=""></a>
 										</li>
-
-										<li>
-											<a class="strip" href="https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png" title="" data-strip-group="mygroup" data-strip-group-options="loop: false">
-												<img src="https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png" style="height: 250px; width: 300px;" alt=""></a>
-										</li>
-
-										<li>
-											<a class="strip" href="https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png" title="" data-strip-group="mygroup" data-strip-group-options="loop: false">
-												<img src="https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png" style="height: 250px; width: 300px;" alt=""></a>
-										</li>
+										{% endfor %}
+										
 										
 										
 									</ul>
@@ -157,7 +233,7 @@
 
 	
 	
-	<script data-cfasync="false" src="{% static '../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js' %}"></script><script src="js/main.min.js"></script>
+	<script data-cfasync="false" src="{% static '../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js' %}"></script><script src="{% static 'js/main.min.js' %}"></script>
 	<script src="{% static 'js/script.js' %}"></script>
 
 </body>	

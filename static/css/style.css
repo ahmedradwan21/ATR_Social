@@ -254,7 +254,7 @@ section {
 .gray-bg {
     float: left;
     width: 100%;
-    background: #b0b3b8;
+    background: #ffffff;
 }
 
 [type="submit"],
@@ -730,6 +730,7 @@ header.sticky {
 
 .feature-photo .container-fluid {
     padding: 0 43px;
+    background: white;
 }
 
 .feature-photo {

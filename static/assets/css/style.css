@@ -8,7 +8,7 @@
  
 
 body{
-  background-color: #fbfcff!important;
+  background-color: #0f061f!important;
   
 }
 
@@ -1553,6 +1553,8 @@ header .header_inner {
   width: 100%;
   max-width: 100% !important;
   padding: 0 30px;
+  /* background: black; */
+  /* background: darkorange; */
 }
 
 header .header_inner .left-side {

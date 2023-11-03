@@ -48,7 +48,8 @@ Remove the margin in all browsers.
 
 body {
   margin: 0;
-  background-color: #fbfcff!important;
+  background-color: #ffffff!important;
+  /* background-color: #0f061f!important; */
 }
 
 /**
@@ -1576,6 +1577,7 @@ video {
 .px-3{
   padding-left: 0.75rem;
   padding-right: 0.75rem;
+  background: black;
 }
 
 .py-4{
