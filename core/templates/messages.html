@@ -1,0 +1,39 @@
+{% comment %} <!-- messages.html -->
+
+
+{% block content %}
+  <h1>Messages</h1>
+  
+  <div>
+    <h2>Followers</h2>
+    {% for follower in followers %}
+      <p><a href="{% url 'view_messages' follower.id %}">{{ follower.username }}</a></p>
+    {% endfor %}
+  </div>
+
+  <hr>
+
+  {% if selected_user %}
+    <h2>Messages with {{ selected_user.username }}</h2>
+
+    <!-- Display messages between the current user and selected user -->
+    {% for message in messages %}
+      {% if message.sender == user %}
+        <p><strong>You:</strong> {{ message.content }}</p>
+      {% else %}
+        <p><strong>{{ selected_user.username }}:</strong> {{ message.content }}</p>
+      {% endif %}
+    {% endfor %}
+
+    <!-- Form to send a new message -->
+    <form method="post" action="{% url 'send_message' selected_user.id %}">
+      {% csrf_token %}
+      <label for="content">New Message:</label>
+      <textarea name="content" id="content" rows="3"></textarea>
+      <button type="submit">Send</button>
+    </form>
+
+  {% else %}
+    <p>Select a user to view messages.</p>
+  {% endif %}
+{% endblock %} {% endcomment %}

@@ -1,0 +1,109 @@
+<!-- In templates/view_post.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            color: #495057;
+        }
+    
+        .post-container {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #dee2e6;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+    
+        .post-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+    
+        .post-caption {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+    
+        .post-likes {
+            font-weight: bold;
+            color: #007bff;
+        }
+    
+        .comments-section {
+            margin-top: 30px;
+        }
+    
+        .comment {
+            margin-bottom: 10px;
+            padding: 8px;
+            background-color: #f1f3f5;
+            border-radius: 5px;
+        }
+    
+        .add-comment-form {
+            margin-top: 20px;
+        }
+    
+        .comment-input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            resize: vertical;
+        }
+    
+        .comment-submit {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+    
+</head>
+<body>
+     <!-- Comments Section -->
+     <div class="post-container">
+        {% if post.image %}
+            <img src="{{ post.image.url }}" alt="Post Image" class="post-image">
+        {% endif %}
+        <p class="post-caption">{{ post.caption }}</p>
+        <p class="post-likes">Likes: {{ post.likes }}</p>
+    </div>
+     <div class="comments-section">
+        <h3>Comments:</h3>
+        {% for comment in comments %}
+            <div class="comment">
+                <p><strong>{{ comment.user.username }}</strong>: {{ comment.content }}</p>
+                
+                {% if comment.user == request.user %}
+                    <a href="{% url 'delete_comment' comment.id %}">Delete</a>
+                    <a href="{% url 'edit_comment' comment.id %}">Edit</a>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+    
+    <!-- Add Comment Form -->
+    <form method="post" action="{% url 'add_comment' post.id %}">
+        {% csrf_token %}
+        <label for="content">Add a Comment:</label>
+        <textarea name="content" id="content" rows="3" required></textarea>
+        <button type="submit">Add Comment</button>
+    </form>
+</body>
+</html>

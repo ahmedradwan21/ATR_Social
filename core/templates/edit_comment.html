@@ -1,0 +1,16 @@
+<!-- In templates/edit_comment.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Add your head content here -->
+</head>
+<body>
+    <h2>Edit Comment</h2>
+    <form method="post" action="">
+        {% csrf_token %}
+        <label for="content">Edit your comment:</label>
+        <textarea name="content" id="content" rows="3" required>{{ comment.content }}</textarea>
+        <button type="submit">Save Changes</button>
+    </form>
+</body>
+</html>

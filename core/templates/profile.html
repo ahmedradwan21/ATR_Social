@@ -207,11 +207,14 @@
 									<ul class="photos">
 					
 										{% for post in user_posts %}
-										<li>
-											<a class="strip" href="{{post.image.url}}" title="" data-strip-group="mygroup" data-strip-group-options="loop: false">
-												<img src="{{post.image.url}}" style="height: 250px; width: 300px;" alt=""></a>
-										</li>
-										{% endfor %}
+										{% if post.image %}
+											<li>
+												<a class="strip" href="{{post.image.url}}" title="" data-strip-group="mygroup" data-strip-group-options="loop: false">
+													<img src="{{post.image.url}}" style="height: 250px; width: 300px;" alt="">
+												</a>
+											</li>
+										{% endif %}
+									{% endfor %}
 										
 										
 										

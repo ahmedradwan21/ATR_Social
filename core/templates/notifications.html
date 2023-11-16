@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to your CSS file -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .notifications-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .notification {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        .notification p {
+            margin: 0;
+        }
+        
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        
+        .notification p strong {
+            color: #007BFF; /* You can use your preferred color */
+        }
+
+        /* Add styles for links */
+        .notification a {
+            color: #007BFF;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .notification a:hover {
+            text-decoration: underline;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="notifications-container">
+        <h1>Notifications</h1>
+        {% for notification in notifications %}
+            <div class="notification">
+                {% if notification.notification_type == 'Like' %}
+                    <p><strong><a href="{% url 'profile' notification.sender.username %}">{{ notification.sender.username }}</a></strong> liked your post: "<a href="{% url 'view_post' post_id=notification.post.id %}">{{ notification.post.caption }}</a>"</p>
+                {% elif notification.notification_type == 'Comment' %}
+                    <p><strong><a href="{% url 'profile' notification.sender.username %}">{{ notification.sender.username }}</a></strong> commented on your post: "<a href="{% url 'view_post' post_id=notification.post.id %}">{{ notification.post.caption }}</a>"</p>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
